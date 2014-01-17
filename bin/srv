@@ -1,0 +1,24 @@
+#!/bin/sh
+
+dir=$(dirname $0)
+
+if [ -x "$dir/$1" ]; then
+  case "$2" in
+    start|stop)
+      $dir/$1 $2
+      ;;
+    restart)
+      $dir/$1 stop
+      $dir/$1 start
+      ;;
+    *)
+      echo "use srv $1 start|stop|restart"
+      ;;
+  esac
+elif [ "$1" = "all" ]; then
+  for i in *.d; do
+    $dir/srv $i $2
+  done
+else
+  echo "no such file: \"$dir/$1\"" > /dev/stderr
+fi
